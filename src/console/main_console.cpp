@@ -46,6 +46,35 @@ const char* onOff(bool b) { return b ? "SI" : "NO"; }
 
 int main() {
     ReportOptions opt;
-    stepByStepDemo(opt); // menu interactivo: pendiente
+    int op = -1;
+
+    while (op != 0) {
+        std::cout << "\n=== Reportes con Decorator ===\n"
+                  << "1. Cambiar titulo (" << opt.title << ")\n"
+                  << "2. Cambiar contenido\n"
+                  << "3. Cambiar autor (" << opt.author << ")\n"
+                  << "4. Cambiar firmante (" << opt.signer << ")\n"
+                  << "5. Activar/desactivar fecha [" << onOff(opt.withDate) << "]\n"
+                  << "6. Activar/desactivar autor [" << onOff(opt.withAuthor) << "]\n"
+                  << "7. Activar/desactivar firma [" << onOff(opt.withSignature) << "]\n"
+                  << "8. Mostrar reporte\n"
+                  << "9. Demo paso a paso (como se apilan los decoradores)\n"
+                  << "0. Salir\nOpcion: ";
+        if (!(std::cin >> op)) break;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        switch (op) {
+            case 1: opt.title  = ask("Titulo: "); break;
+            case 2: opt.body   = ask("Contenido: "); break;
+            case 3: opt.author = ask("Autor: "); break;
+            case 4: opt.signer = ask("Firmante: "); break;
+            case 5: opt.withDate      = !opt.withDate; break;
+            case 6: opt.withAuthor    = !opt.withAuthor; break;
+            case 7: opt.withSignature = !opt.withSignature; break;
+            case 8: { auto r = composeReport(opt); printReport("Reporte final", *r); break; }
+            case 9: stepByStepDemo(opt); break;
+            default: break;
+        }
+    }
     return 0;
 }
